@@ -1,0 +1,12 @@
+data/
+runs/
+wandb/
+*.pt
+*.pth
+*.zip
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+.venv/
+.DS_Store
