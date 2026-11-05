@@ -1,0 +1,9 @@
+class,train,val
+person,328701,50312
+bicycle,40255,6022
+car,505301,31821
+van,46940,6842
+truck,30498,1359
+tricycle,41349,5487
+bus,9653,264
+motor,102819,12025
