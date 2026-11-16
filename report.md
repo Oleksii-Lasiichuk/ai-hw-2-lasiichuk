@@ -200,3 +200,23 @@ WBF (IoU 0.7) (temporal rescoring k=2, a=0.2.)
 
 Гарна домашка. Я знову гарно генералізувався на private (попереднього разу дав +20, зараз +25)
 Міг ще погратись із трансформерами більше. був би не соло в команді а ще з кимось то мав би х2 компʼюту на кагл і був би на то час. Крім того можна було б ще просто напросто більші моделі використати. Або за необмеженого компʼюту all in і тренувати всі фрейми на максимальній роздільній здатності і робити висновки вже потому
+
+
+### How to reproduce
+
+```bash
+pip install -r requirements.txt
+python scripts/download_data.py   # data/raw, needs ~/.kaggle/kaggle.json
+
+# 1. training on Kaggle (T4, competition data attached, seed 42 in every run)
+for r in yolo11s_1280_5ep_lr001 yolo11s_1536_5ep_lr001 yolo11s_1280_3ep_lr001_tile960 yolo11m_1280_3ep_lr001_tile960 \
+         yolo11s_1280_5ep_lr001_temporal2 rtdetr-l_960_20ep_lr0002 yolo11s_1280_3ep_lr001_tile960_fold{0..4}; do
+  python scripts/build_kaggle.py 02_ultralytics $r; done
+for r in frcnn_1280_5ep frcnn_1280_5ep_anchor16 frcnn_1280_2ep_anchor16_tile960 retina_1280_5ep_gamma1; do
+  python scripts/build_kaggle.py 03_torchvision $r; done
+# upload each runs/kaggle/*.ipynb to Kaggle, Run All, then save its output:
+kaggle kernels output <user>/<notebook> -p runs/<run>
+
+# 2. ensemble (WBF IoU 0.7) + temporal rescoring (k=2, a=0.2), locally
+# run all cells of notebooks/04_pipeline.ipynb -> runs/local/submissions/final_1.csv, final_2.csv
+```
